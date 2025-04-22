@@ -26,6 +26,16 @@ app.get("/", (req, res) => {
   res.send("Contact API is running!");
 });
 
+app.options("/api/contact", cors({
+  origin: [
+    "https://earvintumpao.dev",
+    "https://earvinporfolio2.netlify.app"
+  ],
+  methods: ["GET", "POST", "OPTIONS"],
+  optionsSuccessStatus: 200,
+}));
+
+
 app.post("/api/contact", async (req, res) => {
   const { name, email, message } = req.body;
 
