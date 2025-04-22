@@ -10,40 +10,18 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: (origin, callback) => {
-    const allowedOrigins = [
-      "https://earvintumpao.dev",
-      "https://earvinporfolio2.netlify.app",
-      undefined // allow Postman/local dev too
-    ];
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  methods: ["GET", "POST", "OPTIONS"],
-}));
-
-app.options("*", cors()); // Respond to preflight
-
-
-app.use(express.json());
-
-// Sample route
-app.get("/", (req, res) => {
-  res.send("Contact API is running!");
-});
-
-app.options("/api/contact", cors({
   origin: [
     "https://earvintumpao.dev",
     "https://earvinporfolio2.netlify.app"
   ],
-  methods: ["GET", "POST", "OPTIONS"],
-  optionsSuccessStatus: 200,
+  methods: ["GET", "POST"],
 }));
 
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("Contact API is running!");
+});
 
 app.post("/api/contact", async (req, res) => {
   const { name, email, message } = req.body;
@@ -62,36 +40,18 @@ app.post("/api/contact", async (req, res) => {
     });
 
     await transporter.sendMail({
-      from: `"Portfolio Contact" <contact@earvintumpao.dev>`,
+      from: `Portfolio Contact <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_TO,
       subject: `New message from ${name}`,
       text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
       replyTo: email,
     });
-    
-    
 
     res.status(200).json({ message: "Message sent successfully!" });
   } catch (err) {
     console.error("Email error:", err);
     res.status(500).json({ error: "Failed to send message." });
   }
-});
-
-// app.get("/api/debug", (req, res) => {
-//   res.set("Access-Control-Allow-Origin", "*");
-//   res.json({
-//     corsActive: true,
-//     allowedOrigins: [
-//       "https://earvintumpao.dev",
-//       "https://earvinporfolio2.netlify.app"
-//     ],
-//     message: "Debug route is live",
-//   });
-// });
-
-app.use((req, res) => {
-  res.status(404).json({ error: "Route not found" });
 });
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
