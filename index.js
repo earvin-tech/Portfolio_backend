@@ -14,8 +14,9 @@ app.use(cors({
     "https://earvintumpao.dev",             // ✅ Your custom domain
     "https://earvinporfolio2.netlify.app"   // ✅ Your Netlify preview
   ],
-  methods: ["GET", "POST"],
-  credentials: false, // Unless using cookies, leave this false
+  methods: ["GET", "POST", "OPTIONS"],
+  credentials: false,
+  optionsSuccessStatus: 200, // Unless using cookies, leave this false
 }));
 
 app.use(express.json());
