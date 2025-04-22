@@ -1,3 +1,4 @@
+
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -8,36 +9,23 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// ✅ Whitelist for your frontend domains
-const allowedOrigins = [
-  "https://earvintumpao.dev",
-  "https://earvinporfolio2.netlify.app"
-];
-
-// ✅ CORS Middleware
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    console.log("❌ CORS blocked for origin:", origin);
-    return callback(new Error("Not allowed by CORS"));
-  },
-  methods: ["GET", "POST", "OPTIONS"],
-  optionsSuccessStatus: 200
-}));
+// Global CORS headers for all requests including OPTIONS
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://earvintumpao.dev");
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 app.use(express.json());
 
-// ✅ Preflight handler — MUST come after cors() and before routes
-app.options("*", cors());
-
-// Test route
 app.get("/", (req, res) => {
   res.send("Contact API is running!");
 });
 
-// Contact form handler
 app.post("/api/contact", async (req, res) => {
   const { name, email, message } = req.body;
 
@@ -69,11 +57,4 @@ app.post("/api/contact", async (req, res) => {
   }
 });
 
-// Fallback route
-app.use((req, res) => {
-  res.status(404).json({ error: "Route not found" });
-});
-
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
