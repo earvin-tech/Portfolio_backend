@@ -11,11 +11,13 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors({
   origin: [
-    "https://earvinporfolio2.netlify.app",
-    "https://earvintumpao.dev",
+    "https://earvintumpao.dev",             // ✅ Your custom domain
+    "https://earvinporfolio2.netlify.app"   // ✅ Your Netlify preview
   ],
+  methods: ["GET", "POST"],
+  credentials: false, // Unless using cookies, leave this false
 }));
-app.use(express.json());
+
 
 // Sample route
 app.get("/", (req, res) => {
