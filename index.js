@@ -10,14 +10,23 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: [
-    "https://earvintumpao.dev",             // ✅ Your custom domain
-    "https://earvinporfolio2.netlify.app"   // ✅ Your Netlify preview
-  ],
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      "https://earvintumpao.dev",
+      "https://earvinporfolio2.netlify.app",
+      undefined // allow Postman/local dev too
+    ];
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST", "OPTIONS"],
-  credentials: false,
-  optionsSuccessStatus: 200, // Unless using cookies, leave this false
 }));
+
+app.options("*", cors()); // Respond to preflight
+
 
 app.use(express.json());
 
@@ -81,6 +90,8 @@ app.get("/api/debug", (req, res) => {
   });
 });
 
-
+app.use((req, res) => {
+  res.status(404).json({ error: "Route not found" });
+});
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
