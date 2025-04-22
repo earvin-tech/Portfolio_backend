@@ -10,7 +10,10 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: ["https://earvinporfolio2.netlify.app"],
+  origin: [
+    "https://earvinporfolio2.netlify.app",
+    "https://earvintumpao.dev",
+  ],
 }));
 app.use(express.json());
 
