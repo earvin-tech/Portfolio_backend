@@ -20,6 +20,11 @@ const allowedOrigins = [
   "https://earvinporfolio2.netlify.app"
 ];
 
+app.use((req, res, next) => {
+  console.log("Origin received:", req.headers.origin);
+  next();
+});
+
 app.use(cors({
   origin: function (origin, callback) {
     console.log("CORS check for:", origin);
@@ -32,6 +37,7 @@ app.use(cors({
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type"],
 }));
+
 
 
 // Preflight
