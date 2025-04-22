@@ -58,5 +58,18 @@ app.post("/api/contact", async (req, res) => {
   }
 });
 
+app.get("/api/debug", (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
+  res.json({
+    corsActive: true,
+    allowedOrigins: [
+      "https://earvintumpao.dev",
+      "https://earvinporfolio2.netlify.app"
+    ],
+    message: "Debug route is live",
+  });
+});
+
+
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
