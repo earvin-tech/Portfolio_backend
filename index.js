@@ -18,6 +18,7 @@ app.use(cors({
   credentials: false, // Unless using cookies, leave this false
 }));
 
+app.use(express.json());
 
 // Sample route
 app.get("/", (req, res) => {
