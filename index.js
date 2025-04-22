@@ -15,6 +15,7 @@ app.use(cors({
     "https://earvinporfolio2.netlify.app"
   ],
   methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type"],
 }));
 
 app.use(express.json());
@@ -53,5 +54,7 @@ app.post("/api/contact", async (req, res) => {
     res.status(500).json({ error: "Failed to send message." });
   }
 });
+
+app.options("*", cors()); // Pre-flight for all routes
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
